@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>upload_file</title>
+</head>
+<body>
+<form action="/submit_file/{{item_id}}" method="POST" enctype="multipart/form-data">
+    <h2 align="center">标注文本上传</h2>
+    <hr>
+    <div align="center">
+        <input type="file" name="file" required=""/><br><br>
+        <input type="submit" /><br>
+        <p><span style="color:#ff0000;">暂支持txt、docx类型文件</span></p>
+    </div>
+</form>
+</body>
+</html>
