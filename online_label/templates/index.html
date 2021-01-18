@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>标注项目</title>
+</head>
+<body>
+<form action="">
+    <div>
+        <h2 align="center">标注项目界面</h2>
+        <div align="right">
+            欢迎您,{{session['username']}}&nbsp&nbsp
+            <a href="/logout"><input type="button" value="注销"></a>
+        </div>
+    </div>
+<hr>
+
+            {% if label_items %}
+                <table align="center"  border = 1>
+                    <tr align="center">
+                        <th>项目名称</th>
+                        <th>项目描述</th>
+                        <th>操作</th>
+                    </tr>
+                {% for item in label_items %}
+                    <tr align="center">
+                        <td>{{item['n']['name']}}</td>
+                        <td>{{item['n']['describe']}}</td>
+                        <td>
+                            &nbsp&nbsp
+                            <a href="/just_label/{{item['ID(n)']}}"><input type="button" value='标注'></a>&nbsp
+<!--                            <a href="/del_label_item/{{item['ID(n)']}}"><input type="button" value='删除'></a>&nbsp-->
+                            <a href="/upload_file/{{item['ID(n)']}}"><input type="button" value='导入'></a>&nbsp
+                            <a href=""><button>清空</button></a>&nbsp&nbsp
+                        </td>
+                    </tr>
+                {% endfor %}
+                </table>
+            {% endif %}
+            <br>
+            <div align="center"><input type="button" value="添加项目" onclick="javascrtpt:window.location.href='/add_label_item'"></div>
+            <div align="center">
+                {% if error %}
+                    <p><span style="color:#ff0000;"><strong>Error</strong>: {{ error }}</span></p>
+                {% endif %}
+            </div>
+</form>
+</body>
+</html>
