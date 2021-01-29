@@ -2,19 +2,129 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>update_label</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
 </head>
 <body>
-<form action="">
-    <h2 align="center">标签修改界面</h2>
+    <nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/Labelitem">知识图谱自动构建</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="/Labelitem">首页</a></li>
+            <li class="active"><a href="#">数据标注 <span class="sr-only">(current)</span></a></li>
+            <li><a href="#">知识抽取</a></li><li><a href="#">知识融合</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{session['username']}} <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">个人资料</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/logout">注销</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
     <hr>
-    <div>
-        <a href=""><input type="button" value="添加实体标签"></a>
+    <br><br>
+    <div class="container">
+        <input type="button" value="添加实体类别" class="btn btn-primary" onclick="setentityValue()">
+        <table id="addentityTable">
+            <tbody id="entitytempleteTBody" style="display: none;">
+                <tr>
+                    <td><h4>类别名称:</h4></td>
+                    <td><input type="text" name="infos[entity][]"/></td>
+                    <td>&nbsp;<input type="button" value="删除" class="btn btn-danger" onclick="deleteentityRow(this)"/></td>
+                </tr>
+            </tbody>
+            <tbody id="entityfootTbody"></tbody>
+        </table>
+        <hr>
+        <input type="button" value="添加关系类别" class="btn btn-primary" onclick="setrelationValue()">
+        <table id="addrelationTable">
+            <tbody id="relationtempleteTBody" style="display: none;">
+                <tr>
+                    <td><h4>类别名称:</h4></td>
+                    <td><input type="text" name="infos[relation][]"/></td>
+                    <td>&nbsp;<input type="button" value="删除" class="btn btn-danger" onclick="deleterelationRow(this)"/></td>
+                </tr>
+            </tbody>
+            <tbody id="relationfootTbody"></tbody>
+        </table>
+        <br><br><br>
+        <div class="col-md-offset-6">
+            <input type="button" value="提交" class="btn btn-success">
+        </div>
     </div>
-    <hr>
-    <div>
-        <a href=""><input type="button" value="添加关系标签"></a>
-    </div>
-</form>
+
+    <script type="text/javascript">
+        /*
+        *增加实体模板行
+        */
+        function addentityRow() {
+            var table = document.getElementById("addentityTable");
+            var tbody = document.getElementById("entitytempleteTBody");
+            var newTBody = tbody.cloneNode(true);
+            newTBody.style.display="";
+            var footTBody = document.getElementById("entityfootTbody");
+            return table.insertBefore(newTBody,footTBody);
+        }
+        /*
+        *删除实体模板行
+        */
+        function deleteentityRow(obj) {
+            var tbody = obj.parentNode.parentNode.parentNode;
+            var table = document.getElementById("addentityTable");
+            table.removeChild(tbody);
+        }
+        /**
+        *向实体模板中填充值
+        */
+        function setentityValue(){
+            var tbody=addentityRow();
+        }
+                /*
+        *增加关系模板行
+        */
+        function addrelationRow() {
+            var table = document.getElementById("addrelationTable");
+            var tbody = document.getElementById("relationtempleteTBody");
+            var newTBody = tbody.cloneNode(true);
+            newTBody.style.display="";
+            var footTBody = document.getElementById("relationfootTbody");
+            return table.insertBefore(newTBody,footTBody);
+        }
+        /*
+        *删除关系模板行
+        */
+        function deleterelationRow(obj) {
+            var tbody = obj.parentNode.parentNode.parentNode;
+            var table = document.getElementById("addrelationTable");
+            table.removeChild(tbody);
+        }
+        /**
+        *向关系模板中填充值
+        */
+        function setrelationValue(){
+            var tbody=addrelationRow();
+        }
+    </script>
 </body>
 </html>

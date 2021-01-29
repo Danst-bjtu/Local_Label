@@ -10,6 +10,6 @@ from docx import Document
 just_label = Blueprint('just_label', __name__)  # 蓝图使用方法，参数里给定文件名，还可以给定url前缀
 graph = Graph('http://localhost:7474', user='neo4j', password='123456')
 
-@just_label.route('/update_label/{{item_id}}')
+@just_label.route('/update_label/<item_id>')
 def update_label(item_id):
     return render_template('update_label.html',item_id=item_id)

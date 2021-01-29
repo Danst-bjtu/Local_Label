@@ -19,7 +19,7 @@ for url in urls:
 
 @app.route('/')
 def login():
-    return render_template('login.html')
+    return render_template('login_register.html')
 
 
 @app.route('/Labelitem')
