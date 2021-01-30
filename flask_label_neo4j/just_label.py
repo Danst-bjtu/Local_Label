@@ -23,8 +23,8 @@ def update_label(item_id):
 def update_label_submit(item_id):
     entity = str(request.form.getlist('entity')).replace('[', '').replace(']', '').replace('\'', '').split(',')
     relation = str(request.form.getlist('relation')).replace('[', '').replace(']', '').replace('\'', '').split(',')
-    entitytype = list(filter(None, entity))
-    relationtype = list(filter(None, relation))
+    entitytype = list(filter(lambda x: x and x.strip(), entity))
+    relationtype = list(filter(lambda x: x and x.strip(), relation))
     for entity in entitytype:
         graph.run("match(n:label_items) where ID(n)=" + item_id + " create(n)-[r:包含]->(m:实体类别{name:'" + entity + "'})")
     for relation in relationtype:
