@@ -15,8 +15,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    fileid = graph.run("match(n:label_items) where ID(n)=3 create (n)-[r:文件路径]->(m:文本文件{path:'"+os.path.join(UPLOAD_FOLDER, secure_filename(newfilename))+"'}) return ID(m)").data()
-    ss = fileid[0]['ID(m)']
+    relation_type = graph.run("MATCH (n:label_items)-[r:`包含`]-(m:`实体类别`) where ID(n)=76 return m,count(n)").data()
+    ss = relation_type
     return "mm"+str(ss)
     # path = os.path.join(UPLOAD_FOLDER, secure_filename(newfilename))
     # with open(path, encoding='utf-8') as f:

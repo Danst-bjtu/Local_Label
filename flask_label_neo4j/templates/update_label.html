@@ -26,7 +26,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             <li><a href="/Labelitem">首页</a></li>
-            <li class="active"><a href="#">数据标注 <span class="sr-only">(current)</span></a></li>
+            <li class="active"><a href="/just_label/{{item_id}}">数据标注 <span class="sr-only">(current)</span></a></li>
             <li><a href="#">知识抽取</a></li><li><a href="#">知识融合</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
@@ -44,36 +44,68 @@
     </nav>
     <hr>
     <br><br>
-    <div class="container">
-        <input type="button" value="添加实体类别" class="btn btn-primary" onclick="setentityValue()">
-        <table id="addentityTable">
-            <tbody id="entitytempleteTBody" style="display: none;">
-                <tr>
-                    <td><h4>类别名称:</h4></td>
-                    <td><input type="text" name="infos[entity][]"/></td>
-                    <td>&nbsp;<input type="button" value="删除" class="btn btn-danger" onclick="deleteentityRow(this)"/></td>
-                </tr>
-            </tbody>
-            <tbody id="entityfootTbody"></tbody>
-        </table>
-        <hr>
-        <input type="button" value="添加关系类别" class="btn btn-primary" onclick="setrelationValue()">
-        <table id="addrelationTable">
-            <tbody id="relationtempleteTBody" style="display: none;">
-                <tr>
-                    <td><h4>类别名称:</h4></td>
-                    <td><input type="text" name="infos[relation][]"/></td>
-                    <td>&nbsp;<input type="button" value="删除" class="btn btn-danger" onclick="deleterelationRow(this)"/></td>
-                </tr>
-            </tbody>
-            <tbody id="relationfootTbody"></tbody>
-        </table>
-        <br><br><br>
-        <div class="col-md-offset-6">
-            <input type="button" value="提交" class="btn btn-success">
+    <form action="/update_label_submit/{{item_id}}" method="POST" enctype="multipart/form-data">
+        <div class="container">
+            <div class="col-md-6 col-md-offset-0">
+                <label class="btn btn-block" style="background: #bce8f1">
+                    实体类别
+                </label>
+                {% if entity_type %}
+                {% for type in entity_type %}
+                    <span class="label label-danger">{{type['m']['name']}}</span>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="col-md-6 col-md-offset-0">
+                <label class="btn btn-block" style="background: #eb9316">
+                    关系类别
+                </label>
+                {% if relation_type %}
+                {% for type in relation_type %}
+                    <span class="label label-default">{{type['m']['name']}}</span>
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="clearfix"></div>
+            <hr>
+            <div class="col-md-6 col-md-offset-0">
+                <input type="button" value="添加实体类别" class="btn btn-primary" onclick="setentityValue()">
+                </table>
+                <table id="addentityTable">
+                    <tbody id="entitytempleteTBody" style="display: none;">
+                        <tr>
+                            <td><h6><input type="text" name="entity" class="form-control" placeholder="类别名称"/></h6></td>
+                            <td>&nbsp;<input type="button" value="删除" class="btn btn-danger" onclick="deleteentityRow(this)"/></td>
+                        </tr>
+                    </tbody>
+                    <tbody id="entityfootTbody"></tbody>
+                </table>
+            </div>
+            <div class="col-md-3 col-md-offset-0">
+                <input type="button" value="添加关系类别" class="btn btn-primary" onclick="setrelationValue()">
+                <table id="addrelationTable">
+                    <tbody id="relationtempleteTBody" style="display: none;">
+                        <tr>
+                            <td><h6><input type="text" name="relation" class="form-control" placeholder="类别名称"/></h6></td>
+                            <td>&nbsp;<input type="button" value="删除" class="btn btn-danger" onclick="deleterelationRow(this)"/></td>
+                        </tr>
+                    </tbody>
+                    <tbody id="relationfootTbody"></tbody>
+                </table>
+            </div>
+            <div class="col-md-1 col-md-offset-2">
+                <button type="submit" class="btn btn-success">提交</button>
+            </div>
+            <div class="clearfix"></div>
+            <br><br><br>
+            {% if alert %}
+                <div class="alert alert-success alert-dismissible col-md-6 col-md-offset-3" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong>{{alert}}</strong>
+                </div>
+            {% endif %}
         </div>
-    </div>
-
+    </form>
     <script type="text/javascript">
         /*
         *增加实体模板行
