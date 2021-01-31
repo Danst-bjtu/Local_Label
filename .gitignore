@@ -1,0 +1,5 @@
+
+*.pyc
+flask_label_neo4j/__pycache__/just_label.cpython-38.pyc
+flask_label_neo4j/__pycache__/label_items.cpython-38.pyc
+*.pyc
