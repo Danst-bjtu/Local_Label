@@ -30,7 +30,10 @@ def Labelitem():
 
 @app.route('/just_label/<item_id>')
 def just_label(item_id):
-    return render_template('just_label.html', item_id=item_id)
+    sen_count = graph.run("match(n:label_items)-[r:`文件路径`]->(m),(m)-[s:分句]->(q) where ID(n)="+item_id+" return count(q)").data()
+    islabel_count = graph.run("match(n:label_items)-[r:`文件路径`]->(m),(m)-[s:分句]->(q) where ID(n)="+item_id+" and q.islabel='yes' return count(q)").data()
+    zhanbi = round(int(islabel_count[0]['count(q)'])*100/int(sen_count[0]['count(q)']), 2)
+    return render_template('just_label.html', item_id=item_id, sen_count=sen_count, islabel_count=islabel_count, zhanbi=zhanbi)
 
 if __name__ == '__main__':
     app.run()
