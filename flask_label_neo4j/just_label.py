@@ -16,7 +16,9 @@ graph = Graph('http://localhost:7474', user='neo4j', password='123456')
 def update_label(item_id):
     entity_type = graph.run("MATCH (n:label_items)-[r:`包含`]-(m:`实体类别`) where ID(n)=" + item_id + " return m").data()
     relation_type = graph.run("MATCH (n:label_items)-[r:`包含`]-(m:`关系类别`) where ID(n)=" + item_id + " return m").data()
-    return render_template('update_label.html', item_id=item_id, entity_type=entity_type, relation_type=relation_type)
+    entity_count = len(list(entity_type))
+    relation_count = len(list(relation_type))
+    return render_template('update_label.html', item_id=item_id, entity_type=entity_type, relation_type=relation_type, entity_count = entity_count, relation_count = relation_count)
 
 
 @just_label.route('/update_label_submit/<item_id>', methods=['POST'])

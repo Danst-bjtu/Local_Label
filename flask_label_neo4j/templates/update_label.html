@@ -48,7 +48,7 @@
         <div class="container">
             <div class="col-md-6 col-md-offset-0">
                 <label class="btn btn-block" style="background: #bce8f1">
-                    实体类别
+                    实体类别&nbsp<span class="badge">{{entity_count}}</span>
                 </label>
                 {% if entity_type %}
                 {% for type in entity_type %}
@@ -58,7 +58,7 @@
             </div>
             <div class="col-md-6 col-md-offset-0">
                 <label class="btn btn-block" style="background: #eb9316">
-                    关系类别
+                    关系类别&nbsp<span class="badge">{{relation_count}}</span>
                 </label>
                 {% if relation_type %}
                 {% for type in relation_type %}
