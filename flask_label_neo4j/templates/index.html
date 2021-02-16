@@ -47,13 +47,6 @@
     <div class="clearfix"></div>
     <br><br>
     <div class="container">
-<!--        <div>-->
-<!--            <div align="right">-->
-<!--                {{session['username']}}&nbsp&nbsp-->
-<!--                <a href="/logout"><input type="button" value="注销" class="btn btn-primary"></a>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <hr>-->
         <div class="col-md-10" style="margin: auto;float: none;display: block">
             {% if label_items %}
                 <table class="table table-striped table-hover text-center">
@@ -67,10 +60,10 @@
                             <td class="align-middle">{{item['n']['name']}}</td>
                             <td class="align-middle">{{item['n']['describe']}}</td>
                             <td class="align-middle">
-                                &nbsp&nbsp
                                 <a href="/just_label/{{item['ID(n)']}}"><input type="button" value='标注' class="btn btn-danger"></a>&nbsp
-        <!--                    <a href="/del_label_item/{{item['ID(n)']}}"><input type="button" value='删除'></a>&nbsp-->
-        <!--                    <a href=""><button>清空</button></a>&nbsp&nbsp-->
+                                <a href="/update_label/{{item['ID(n)']}}"><input type="button" value='标签' class="btn btn-info"></a>&nbsp
+                                <a href="/del_label_item/{{item['ID(n)']}}"><input type="button" value='删除' class="btn btn-primary"></a>&nbsp
+                                <a href="/reset_date/{{item['ID(n)']}}"><input type="button" value='清空' class="btn btn-warning"></a>
                             </td>
                         </tr>
                     {% endfor %}
