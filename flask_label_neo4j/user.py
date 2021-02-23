@@ -6,6 +6,7 @@ import os
 from py2neo import Graph, Node, Relationship, NodeMatcher
 import py2neo
 
+
 user = Blueprint('user', __name__)  # 蓝图使用方法，参数里给定文件名，还可以给定url前缀
 graph = Graph('http://localhost:7474', user='neo4j', password='123456')
 
