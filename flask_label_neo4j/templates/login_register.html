@@ -63,12 +63,30 @@
     <script src="../static/js/script.js"></script>
     <script type="text/javascript">
          function act1(){
-             document.form.action="/loginProcess";
-             document.form.submit();
+             var x = document.forms["form"]["log_username"].value;
+             var y = document.forms["form"]["log_password"].value;
+             if (x == ""||y == "") {
+                 alert("请输入用户名或密码");
+                 return false;
+             }
+             else{
+                 document.form.action="/loginProcess";
+                 document.form.submit();
+             }
+             return true;
          }
          function act2(){
-             document.form.action="/registerProcess";
-             document.form.submit();
+             var x = document.forms["form"]["re_username"].value;
+             var y = document.forms["form"]["re_password"].value;
+             if (x == ""||y == "") {
+                 alert("请输入用户名或密码");
+                 return false;
+             }
+             else{
+                 document.form.action="/registerProcess";
+                 document.form.submit();
+             }
+            return true;
          }
     </script>
 </body>

@@ -15,18 +15,14 @@ def loginProcess():
     error = None
     username = request.form['log_username']
     password = request.form['log_password']
-    if username == "" or password == "":
-        error = "请输入用户名或密码"
-        return render_template('login_register.html', error=error)
+    usernames = graph.run(
+        "match (n:user {username:'" + username + "',password:'" + password + "'}) return count(n)").data()
+    if usernames[0]['count(n)'] != 0:
+        session['username'] = username
+        return redirect(url_for('Labelitem'))
     else:
-        usernames = graph.run(
-            "match (n:user {username:'" + username + "',password:'" + password + "'}) return count(n)").data()
-        if usernames[0]['count(n)'] != 0:
-            session['username'] = username
-            return redirect(url_for('Labelitem'))
-        else:
-            error = "用户名或密码错误"
-            return render_template('login_register.html', error=error)
+        error = "用户名或密码错误"
+        return render_template('login_register.html', error=error)
 
 
 @user.route('/logout')
@@ -40,14 +36,10 @@ def registerProcess():
     error = None
     username = request.form['re_username']
     password = request.form['re_password']
-    if username == "" or password == "":
-        error = "请输入用户名或密码"
-        return render_template('login_register.html', error=error)
+    usernames = graph.run("match (n:user {username:'" + username + "'}) return count(n)").data()
+    if usernames[0]['count(n)'] == 0:
+        graph.run("create (n:user {username:'" + username + "',password:'" + password + "'}) return n")
+        return render_template('login_register.html', error='注册成功，请登录')
     else:
-        usernames = graph.run("match (n:user {username:'" + username + "'}) return count(n)").data()
-        if usernames[0]['count(n)'] == 0:
-            graph.run("create (n:user {username:'" + username + "',password:'" + password + "'}) return n")
-            return render_template('login_register.html', error='注册成功，请登录')
-        else:
-            error = "该用户名已被注册"
-            return render_template('login_register.html', error=error)
+        error = "该用户名已被注册"
+        return render_template('login_register.html', error=error)
