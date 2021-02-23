@@ -45,19 +45,79 @@
     <hr>
     <br>
     <div>
-        <div class="col-md-8 col-md-offset-1">
+        <div class="col-md-10 col-md-offset-1">
             <div class="progress" style="height: 35px">
                 <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{zhanbi}}%">
                     <span style="font-size:15px; color: coral; line-height:35px">{{islabel_count[0]['count(q)']}}/{{sen_count[0]['count(q)']}}&nbspComplete</span>
                 </div>
             </div>
         </div>
-        <div class="col-md-offset-10">
+<!--        <div class="col-md-offset-10">-->
 <!--            <a href="/Labelitem"><input type="button" class="btn btn-danger" value='返回'></a>-->
-            <a href="/update_label/{{item_id}}"><input type="button" class="btn btn-danger" value='标签'></a>
-            <a href="/submit/{{item_id}}"><input type="button" class="btn btn-success" value='提交'></a>&nbsp;
-        </div>
+<!--            <a href="/update_label/{{item_id}}"><input type="button" class="btn btn-danger" value='标签'></a>-->
+<!--            <a href="/submit/{{item_id}}"><input type="button" class="btn btn-success" value='提交'></a>&nbsp;-->
+<!--        </div>-->
     </div>
     <div class="clearfix"></div>
+    <div class="container-fluid">
+        <div class="col-md-9 panel panel-default panel-primary">
+            <div class="panel-heading">标注文本</div>
+            <div class="panel-body">
+                {{fenju}}
+            </div>
+        </div>
+        <div class="col-md-3 panel panel-default panel-danger">
+            <div class="panel-heading">实体信息<button class="col-md-offset-4 btn btn-warning">添加</button>&nbsp<button class="btn btn-warning">提交</button></div>
+            <div class="panel-body">
+                <div class="input-group">
+                  <span class="input-group-addon">实体名称</span>
+                  <input type="text" class="form-control" placeholder="名称" aria-describedby="sizing-addon2">
+                </div>
+                <div class="input-group">
+                  <span class="input-group-addon">实体类别</span>
+                    <select class="form-control">
+                      <option value="volvo">地名</option>
+                      <option value="saab">时间</option>
+                      <option value="opel">人名</option>
+                      <option value="audi">公司</option>
+                    </select>
+<!--                  <input type="text" class="form-control" placeholder="类别" aria-describedby="sizing-addon2">-->
+                </div>
+                <button class="col-md-offset-10 btn btn-danger">删除</button>
+
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <nav aria-label="..." class="col-md-9">
+          <ul class="pager">
+            <li><a href="#">Previous</a></li>
+            <li><a href="#">Next</a></li>
+          </ul>
+        </nav>
+        <div class="col-md-3 panel panel-default panel-success">
+            <div class="panel-heading">关系信息<button class="col-md-offset-4 btn btn-warning">添加</button>&nbsp<button class="btn btn-warning">提交</button></div>
+            <div class="panel-body">
+                <div class="input-group">
+                  <span class="input-group-addon" id="sizing-addon1">头实体</span>
+                  <input type="text" class="form-control" placeholder="头实体" aria-describedby="sizing-addon2">
+                </div>
+                <div class="input-group">
+                  <span class="input-group-addon" id="sizing-addon2">关系</span>
+                    <select class="form-control">
+                      <option value="volvo">上级</option>
+                      <option value="saab">下级</option>
+                      <option value="opel">平级</option>
+                      <option value="audi">属于</option>
+                    </select>
+<!--                  <input type="text" class="form-control" placeholder="关系选择" aria-describedby="sizing-addon2">-->
+                </div>
+                <div class="input-group">
+                  <span class="input-group-addon" id="sizing-addon3">尾实体</span>
+                  <input type="text" class="form-control" placeholder="尾实体" aria-describedby="sizing-addon2">
+                </div>
+                <button class="col-md-offset-10 btn btn-danger">删除</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
