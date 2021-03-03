@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>label_inspection</title>
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+    <script src="../static/js/jquery.min.js"></script>
+    <script src="../static/js/bootstrap.min.js"></script>
+</head>
+<body>
+<!--所有分句数量-->
+    <div id="sen_count" d="{{sen_count[0]['count(q)']}}" style="display:none"></div>
+<!--已标注分句数量-->
+    <div id="islabel_count" d="{{islabel_count[0]['count(q)']}}" style="display:none"></div>
+<!--当前标注的句子id-->
+    <div id="current_sen" d="" style="display:none"></div>
+    <nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/Labelitem">知识图谱自动构建</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="/Labelitem">首页</a></li>
+            <li class="active"><a href="/just_label/{{item_id}}">数据标注 <span class="sr-only">(current)</span></a></li>
+            <li><a href="#">知识抽取</a></li><li><a href="#">知识融合</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{session['username']}} <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">个人资料</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="/logout">注销</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+    <hr>
+    <br>
+    <div>
+        <div class="col-md-10 col-md-offset-1">
+            <div class="progress" style="height: 35px">
+                <div id="progress" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: {{zhanbi}}%">
+                    <span id="progress_content" style="font-size:15px; color: coral; line-height:35px">{{islabel_count[0]['count(q)']}}/{{sen_count[0]['count(q)']}}&nbspComplete</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-offset-1">
+            <a href="/Labelitem"><input type="button" class="btn btn-danger" value='结束质检'></a>
+<!--            <a href="/update_label/{{item_id}}"><input type="button" class="btn btn-danger" value='标签'></a>-->
+<!--            <a href="/submit/{{item_id}}"><input type="button" class="btn btn-success" value='提交'></a>&nbsp;-->
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="container-fluid">
+        <div class="col-md-9">
+			<div class="panel panel-default panel-primary">
+				<div class="panel-heading">标注文本</div>
+				<div class="panel-body text-warning">
+<!--					<h3><p id="wenben" style="line-height: 40px">别说公开发言，朋友间过于慎言，迹近官腔的交谈，即由虚伪主导，语言无味之余并不能达到有效率的交流。所以，退一万步想，有时宁愿多些听到老友的失言（或往往是真言）。我永世不能忘记的是我一生的知己在酒醉后把我大骂一场，激动处更用球鞋掷过来。礼貌上他是失礼，但我当场哭将起来，知道他对我的关心与痛心肉紧若此，胜过平常饭局上评谈时事娱圈是非之交友正确。从此我每吃一颗安眠药都想起他酒后失仪对我的贡献。可见，失掉大言，得回真相，于人情与世局都有益无害。</p></h3>-->
+				    <h3><p id="wenben" style="line-height: 40px"></p></h3>
+                </div>
+			</div>
+			<nav aria-label="Page navigation">
+				<ul class="pager">
+				  <li><a id="Previous" href="javascript:Previous()">Previous</a></li>
+				  <li><a id="Next" href="javascript:Next()">Next</a></li>
+				</ul>
+			</nav>
+		</div>
+        <div class="col-md-3">
+<!--            <div class="panel panel-default panel-danger">-->
+<!--                <div class="panel-heading">实体信息</div>-->
+<!--                <div class="panel-body">-->
+<!--					<table id="addentityTable">-->
+<!--						<tbody id="entitytempleteTBody" style="display: none;">-->
+<!--							<tr style="line-height: 40px;">-->
+<!--								<td><button class="entity_name_label btn btn-primary" id="entity_name" name="entity" type="button" onclick="getSelectEntity(this)">-->
+<!--									实体名称与标签-->
+<!--								</button>-->
+<!--								</td>-->
+<!--								<td>-->
+<!--									&nbsp;-->
+<!--									<button type="button" class="btn btn-default" style="border: none" aria-label="Left Align" onclick="deleteentityRow(this)">-->
+<!--										<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>-->
+<!--									</button>-->
+<!--								</td>-->
+<!--							</tr>-->
+<!--						</tbody>-->
+<!--						<tbody id="entityfootTbody"></tbody>-->
+<!--					</table>-->
+
+<!--                </div>-->
+<!--            </div>-->
+            <div class="panel panel-default panel-success">
+                <div class="panel-heading">三元组信息<button class="col-md-offset-6 btn btn-danger" onclick="submitSen()">不合格</button></div>
+                <div class="panel-body">
+                    <table id="addrelationTable" border="1px solid #ccc" cellspacing="0" cellpadding="0">
+                        <tbody id="relationtempleteTBody" >
+                            <tr>
+                                <td class="col-md-10" style="background-color: antiquewhite;">
+                                    <span id="head_entity" class="label label-primary" name="head_entity">头实体</span><br>
+<!--									<input type="hidden" id="input_head_entity" name="head_entity" value="头实体" />-->
+                                    <span id="relation_name" class="label label-default" name="relation_name">关系</span><br>
+<!--									<input type="hidden" id="input_relation_name" name="relation_name" value="关系" />-->
+                                    <span id="tail_entity" class="label label-primary" name="tail_entity">尾实体</span><br>
+<!--									<input type="hidden" id="input_tail_entity" name="tail_entity" value="尾实体" />-->
+                                </td>
+                                <td class="col-md-2">
+                                    <button type="button" class="btn btn-default btn-lg" style="border: none" aria-label="Left Align" onclick="deleterelationRow(this)">
+										<span class="glyphicon glyphicon-remove"></span>
+									</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody id="relationtempleteTBody" >
+                            <tr>
+                                <td class="col-md-10" style="background-color: antiquewhite;">
+                                    <span id="head_entity" class="label label-primary" name="head_entity">头实体</span><br>
+<!--									<input type="hidden" id="input_head_entity" name="head_entity" value="头实体" />-->
+                                    <span id="relation_name" class="label label-default" name="relation_name">关系</span><br>
+<!--									<input type="hidden" id="input_relation_name" name="relation_name" value="关系" />-->
+                                    <span id="tail_entity" class="label label-primary" name="tail_entity">尾实体</span><br>
+<!--									<input type="hidden" id="input_tail_entity" name="tail_entity" value="尾实体" />-->
+                                </td>
+                                <td class="col-md-2">
+                                    <button type="button" class="btn btn-default btn-lg" style="border: none" aria-label="Left Align" onclick="deleterelationRow(this)">
+										<span class="glyphicon glyphicon-remove"></span>
+									</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody id="relationfootTbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--    添加标签弹窗-->
+    <div class="modal fade bs-example-modal-lg" id="entity_label_model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+		<div class="modal-dialog modal-lg" role="document">
+		  <div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">请选择实体标签</h4>
+			  </div>
+			  <div class="modal-body">
+                  {% if entity_type %}
+                  {% for type in entity_type %}
+                    <button type="button" class="btn btn-success btn-lg" data-dismiss="modal" onclick="setentityValue(this)">{{type['m']['name']}}</button>
+                  {% endfor %}
+                  {% else %}
+                    <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal" disabled="disabled">请先添加实体标签</button>
+                  {% endif %}
+              </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+			</div>
+		  </div>
+		</div>
+	</div>
+    <div class="modal fade bs-example-modal-lg" id="relation_label_model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+		<div class="modal-dialog modal-lg" role="document">
+		  <div class="modal-content">
+			  <div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="relation_model">请选择关系标签与尾实体</h4>
+			  </div>
+			  <div class="modal-body">
+                    <!-- 得到所有的关系类别 -->
+                    {% if relation_type %}
+                    {% for type in relation_type %}
+                        <label class="radio-inline"><input type="radio" name="optradio" value="{{type['m']['name']}}">{{type['m']['name']}}</label>
+                    {% endfor %}
+                    {% else %}
+                        <label class="radio-inline"><input type="radio" name="optradio" value="请先添加关系标签" disabled>请先添加关系标签</label>
+                    {% endif %}
+                    <hr>
+                    <button type="button" id="tailEntity" style="display: none;margin: 10px;" class="btn btn-primary" data-dismiss="modal" onclick="setrelationValue(this)">上级</button>
+			  </div>
+			  <div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+			</div>
+		  </div>
+		</div>
+	</div>
+
+    <script type="text/javascript">
+        var skip = 0
+        var fenju={
+            'skip':skip,
+            'item_id':'{{item_id}}'
+        }
+        $.ajax({
+            type:'GET',
+            url:'{{url_for("just_label.next_fenju")}}',
+            data:fenju,
+            dataType:'json',//希望服务器返回json格式的数据
+            success:function(data){
+                var myJSON = JSON.stringify(data);
+                var mylist = JSON.parse(myJSON);
+                document.getElementById('current_sen').setAttribute('d',mylist[0]['ID(q)']);
+                document.getElementById('wenben').innerText=mylist[0]['q']['content'];
+            }
+        });
+
+        // 上一页
+        function Previous(){
+            if(skip>0){
+                skip -= 1;
+                var fenju={
+                    'skip':skip,
+                    'item_id':'{{item_id}}'
+                }
+                $.ajax({
+                    type:'GET',
+                    url:'{{url_for("just_label.next_fenju")}}',
+                    data:fenju,
+                    dataType:'json',//希望服务器返回json格式的数据
+                    success:function(data){
+                        var myJSON = JSON.stringify(data);
+                        var mylist = JSON.parse(myJSON);
+                        document.getElementById('current_sen').setAttribute('d',mylist[0]['ID(q)']);
+                        document.getElementById('wenben').innerText=mylist[0]['q']['content'];
+                    }
+                });
+                $("#entitytempleteTBody").nextAll().remove();
+                $("#relationtempleteTBody").nextAll().remove();
+            }
+        }
+
+        // 下一页
+        function Next(){
+            var shengyu = document.getElementById('sen_count').getAttribute('d')-document.getElementById('islabel_count').getAttribute('d')-1;
+            if(skip<shengyu){
+                skip += 1;
+                var fenju={
+                    'skip':skip,
+                    'item_id':'{{item_id}}'
+                }
+                $.ajax({
+                    type:'GET',
+                    url:'{{url_for("just_label.next_fenju")}}',
+                    data:fenju,
+                    dataType:'json',//希望服务器返回json格式的数据
+                    success:function(data){
+                        var myJSON = JSON.stringify(data);
+                        var mylist = JSON.parse(myJSON);
+                        document.getElementById('current_sen').setAttribute('d',mylist[0]['ID(q)']);
+                        document.getElementById('wenben').innerText=mylist[0]['q']['content'];
+                    }
+                });
+                $("#entitytempleteTBody").nextAll().remove();
+                $("#relationtempleteTBody").nextAll().remove();
+            }
+        }
+
+        // 提交三元组
+        function submitSen(){
+            var submit = []
+            // var headlist = []
+            // var relationlist=[]
+            // var taillist=[]
+            var sen_id = document.getElementById('current_sen').getAttribute('d')
+            var head_entity = document.getElementsByName('head_entity')
+            var relation_name = document.getElementsByName('relation_name')
+            var tail_entity = document.getElementsByName('tail_entity')
+            for(var i=1;i<head_entity.length;i++){
+                submit.push({'head_entity':head_entity[i].innerText,
+                    'relation_name':relation_name[i].innerText,'tail_entity':tail_entity[i].innerText})
+                // headlist.push(head_entity[i].innerText)
+                // relationlist.push(relation_name[i].innerText)
+                // taillist.push(tail_entity[i].innerText)
+            }
+            // submit = {'head_entity':headlist,'relation_name':relationlist,'tail_entity':taillist}
+            submit = {'submit':submit}
+            console.log(sen_id)
+            var fenju={
+                'sen_id':sen_id,
+                'submit':JSON.stringify(submit)
+            }
+            $.ajax({
+                type:'POST',
+                url:'{{url_for("just_label.submit_fenju")}}',
+                data:fenju,
+                dataType:'json',//希望服务器返回json格式的数据
+                success:function(data){
+                    // console.log(JSON.stringify(data))
+                    skip=-1;
+                    alert(JSON.stringify(data).replaceAll('"',''));
+                    var islabel = parseInt(document.getElementById('islabel_count').getAttribute('d'))+1;
+                    document.getElementById('islabel_count').setAttribute('d',islabel);
+                    var sen_count = document.getElementById('sen_count').getAttribute('d');
+                    var zhanbi = islabel*100/sen_count;
+                    document.getElementById('progress').style.width=zhanbi+'%';
+                    document.getElementById('progress_content').innerHTML = islabel+"/"+sen_count+" Complete";
+
+                    // var myJSON = JSON.stringify(data);
+                    // var mylist = JSON.parse(myJSON);
+                    // document.getElementById('current_sen').setAttribute('d',mylist[0]['ID(q)']);
+                    // document.getElementById('wenben').innerText=mylist[0]['q']['content'];
+                }
+            });
+        }
+
+		//  监听 D事件
+		$(document).unbind('keydown').bind('keydown', function(e){
+		    if(e.keyCode  == 68) {
+		        doSomething();
+		        // 返回false, 防止重复触发copy事件
+		        return false;
+		    }
+		})
+
+		// 得到所有已经标注好的实体
+		var entity_name_label = document.getElementsByClassName("entity_name_label");
+		// 得到点击的头实体
+		var selectHeadEntity;
+
+
+		function doSomething(){
+			if(window.getSelection(0).toString()!=''){
+				$(entity_label_model).modal();
+			}
+		}
+
+        /*
+        *增加实体模板行
+        */
+		function addentityRow(obj) {
+			var entity_name = window.getSelection(0).toString();
+			var entity_label = obj.innerText.toString();
+			document.getElementById('entity_name').innerHTML=entity_name+"（"+entity_label+"）";
+            document.getElementById("wenben").innerHTML = document.getElementById("wenben").innerHTML;
+			var table = document.getElementById("addentityTable");
+            var tbody = document.getElementById("entitytempleteTBody");
+            var newTBody = tbody.cloneNode(true);
+            newTBody.style.display="";
+            var footTBody = document.getElementById("entityfootTbody");
+            return table.insertBefore(newTBody,footTBody);
+        }
+        // 得到点击的实体名称与标签
+        function getSelectEntity(obj){
+            selectHeadEntity = obj.innerText.toString();
+            document.getElementById("relation_model").innerText="请选择 <"+selectHeadEntity+"> 的关系标签与尾实体"
+			$("#tailEntity").nextAll().remove();
+			for(var x=1;x<entity_name_label.length;x++){
+				var newBtn = document.getElementById("tailEntity").cloneNode(true);
+				// newBtn.id = "tail_Entity_Copy";
+				newBtn.innerHTML=entity_name_label[x].innerHTML;
+				newBtn.style.display="";
+				var oldBtn = document.getElementById('tailEntity');
+				var parentNode = oldBtn.parentNode;
+				parentNode.insertBefore(newBtn,oldBtn.nextSiblings);
+			}
+            $(relation_label_model).modal();
+        }
+        /*
+        *删除实体模板行
+        */
+        function deleteentityRow(obj) {
+            var tbody = obj.parentNode.parentNode.parentNode;
+            var table = document.getElementById("addentityTable");
+            table.removeChild(tbody);
+        }
+        /**
+        *向实体模板中填充值
+        */
+		function setentityValue(obj){
+            var tbody=addentityRow(obj);
+        }
+                /*
+        *增加关系模板行
+        */
+        function addrelationRow(obj) {
+			var relation_label = $("input[name='optradio']:checked").val(); //得到选中的关系类别
+            var tail_entity = obj.innerText.toString(); //得到选中的尾实体
+			document.getElementById('head_entity').innerHTML=selectHeadEntity;
+			//document.getElementById('input_head_entity').setAttribute("value",selectHeadEntity);
+            document.getElementById('relation_name').innerHTML=relation_label;
+			//document.getElementById('input_relation_name').setAttribute("value",relation_label);
+			document.getElementById('tail_entity').innerHTML=tail_entity;
+			//document.getElementById('input_tail_entity').setAttribute("value",tail_entity);
+            var table = document.getElementById("addrelationTable");
+            var tbody = document.getElementById("relationtempleteTBody");
+            var newTBody = tbody.cloneNode(true);
+            newTBody.style.display="";
+            var footTBody = document.getElementById("relationfootTbody");
+            return table.insertBefore(newTBody,footTBody);
+        }
+        /*
+        *删除关系模板行
+        */
+        function deleterelationRow(obj) {
+            var tbody = obj.parentNode.parentNode.parentNode;
+            var table = document.getElementById("addrelationTable");
+            table.removeChild(tbody);
+        }
+        /**
+        *向关系模板中填充值
+        */
+        function setrelationValue(obj){
+            var tbody=addrelationRow(obj);
+        }
+    </script>
+
+</body>
+</html>
