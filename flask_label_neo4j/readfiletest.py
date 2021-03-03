@@ -1,6 +1,7 @@
-from flask import render_template, Blueprint, send_from_directory
+from flask import render_template, Blueprint, send_from_directory, jsonify
 from flask import make_response
 from flask import Flask, session, redirect, url_for, escape, request, flash
+from pandas import DataFrame
 from werkzeug.utils import secure_filename
 import os
 from py2neo import Graph, Node, Relationship, NodeMatcher
@@ -15,9 +16,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    relation_type = graph.run("MATCH (n:label_items)-[r:`包含`]-(m:`实体类别`) where ID(n)=76 return m,count(n)").data()
-    ss = relation_type
-    return "mm"+str(ss)
+    relation_type = graph.run("match(n:label_items)-[r:`文件路径`]->(m),(m)-[s:分句]->(q) where ID(n)=152 return ID(q),q order by ID(q) SKIP 1 LIMIT 1").data()
+    return jsonify(relation_type)
     # path = os.path.join(UPLOAD_FOLDER, secure_filename(newfilename))
     # with open(path, encoding='utf-8') as f:
     #     s = f.read().split('。')
@@ -27,6 +27,7 @@ def index():
 
 
 if __name__ == '__main__':
+    app.config['JSON_AS_ASCII'] = False
     app.run()
 
 

@@ -9,6 +9,7 @@ import py2neo
 
 user = Blueprint('user', __name__)  # 蓝图使用方法，参数里给定文件名，还可以给定url前缀
 graph = Graph('http://localhost:7474', user='neo4j', password='123456')
+# graph = Graph('bolt://211.71.75.98:7687', user='neo4j', password='zss1234')  #实验室Neo4j数据库连接
 
 
 @user.route('/loginProcess', methods=['POST'])  # 使用user 的路由配置
