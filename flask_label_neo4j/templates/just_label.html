@@ -105,7 +105,7 @@
                 </div>
             </div>
             <div class="panel panel-default panel-success">
-                <div class="panel-heading">三元组信息<button class="col-md-offset-6 btn btn-warning" onclick="submitSen()">提交</button></div>
+                <div class="panel-heading">三元组信息<button class="col-md-offset-6 btn btn-warning" id="submit" onclick="submitSen()">提交</button></div>
                 <div class="panel-body">
                     <table id="addrelationTable" border="1px solid #ccc" cellspacing="0" cellpadding="0">
                         <tbody id="relationtempleteTBody" style="display: none;">
@@ -182,22 +182,29 @@
 
     <script type="text/javascript">
         var skip = 0
-        var fenju={
-            'skip':skip,
-            'item_id':'{{item_id}}'
+        var islabel_count = parseInt(document.getElementById('islabel_count').getAttribute('d'));
+        var sen_count = parseInt(document.getElementById('sen_count').getAttribute('d'));
+        if(islabel_count==sen_count){
+            document.getElementById('submit').setAttribute("disabled","disabled")
         }
-        $.ajax({
-            type:'GET',
-            url:'{{url_for("just_label.next_fenju")}}',
-            data:fenju,
-            dataType:'json',//希望服务器返回json格式的数据
-            success:function(data){
-                var myJSON = JSON.stringify(data);
-                var mylist = JSON.parse(myJSON);
-                document.getElementById('current_sen').setAttribute('d',mylist[0]['ID(q)']);
-                document.getElementById('wenben').innerText=mylist[0]['q']['content'];
+        else{
+            var fenju={
+                'skip':skip,
+                'item_id':'{{item_id}}'
             }
-        });
+            $.ajax({
+                type:'GET',
+                url:'{{url_for("just_label.next_fenju")}}',
+                data:fenju,
+                dataType:'json',//希望服务器返回json格式的数据
+                success:function(data){
+                    var myJSON = JSON.stringify(data);
+                    var mylist = JSON.parse(myJSON);
+                    document.getElementById('current_sen').setAttribute('d',mylist[0]['ID(q)']);
+                    document.getElementById('wenben').innerText=mylist[0]['q']['content'];
+                }
+            });
+        }
 
         // 上一页
         function Previous(){
@@ -215,6 +222,7 @@
                     success:function(data){
                         var myJSON = JSON.stringify(data);
                         var mylist = JSON.parse(myJSON);
+                        document.getElementById('submit').removeAttribute("disabled")
                         document.getElementById('current_sen').setAttribute('d',mylist[0]['ID(q)']);
                         document.getElementById('wenben').innerText=mylist[0]['q']['content'];
                     }
@@ -241,6 +249,7 @@
                     success:function(data){
                         var myJSON = JSON.stringify(data);
                         var mylist = JSON.parse(myJSON);
+                        document.getElementById('submit').removeAttribute("disabled")
                         document.getElementById('current_sen').setAttribute('d',mylist[0]['ID(q)']);
                         document.getElementById('wenben').innerText=mylist[0]['q']['content'];
                     }
@@ -250,18 +259,10 @@
             }
         }
 
-        function extend(target, source) {
-            for (var obj in source) {
-            target[obj] = source[obj];
-            } return target;
-        }
 
         // 提交三元组
         function submitSen(){
             var submit = []
-            // var headlist = []
-            // var relationlist=[]
-            // var taillist=[]
             var sen_id = document.getElementById('current_sen').getAttribute('d')
             var head_entity = document.getElementsByName('head_entity')
             var relation_name = document.getElementsByName('relation_name')
@@ -269,13 +270,8 @@
             for(var i=1;i<head_entity.length;i++){
                 submit.push({'head_entity':head_entity[i].innerText,
                     'relation_name':relation_name[i].innerText,'tail_entity':tail_entity[i].innerText})
-                // headlist.push(head_entity[i].innerText)
-                // relationlist.push(relation_name[i].innerText)
-                // taillist.push(tail_entity[i].innerText)
             }
-            // submit = {'head_entity':headlist,'relation_name':relationlist,'tail_entity':taillist}
             submit = {'submit':submit}
-            console.log(sen_id)
             var fenju={
                 'sen_id':sen_id,
                 'submit':JSON.stringify(submit)
@@ -286,32 +282,32 @@
                 data:fenju,
                 dataType:'json',//希望服务器返回json格式的数据
                 success:function(data){
-                    // console.log(JSON.stringify(data))
                     skip=-1;
                     alert(JSON.stringify(data).replaceAll('"',''));
+                    document.getElementById('submit').setAttribute("disabled","disabled")
                     var islabel = parseInt(document.getElementById('islabel_count').getAttribute('d'))+1;
                     document.getElementById('islabel_count').setAttribute('d',islabel);
                     var sen_count = document.getElementById('sen_count').getAttribute('d');
                     var zhanbi = islabel*100/sen_count;
                     document.getElementById('progress').style.width=zhanbi+'%';
                     document.getElementById('progress_content').innerHTML = islabel+"/"+sen_count+" Complete";
-
-                    // var myJSON = JSON.stringify(data);
-                    // var mylist = JSON.parse(myJSON);
-                    // document.getElementById('current_sen').setAttribute('d',mylist[0]['ID(q)']);
-                    // document.getElementById('wenben').innerText=mylist[0]['q']['content'];
                 }
             });
         }
 
 		//  监听 D事件
-		$(document).unbind('keydown').bind('keydown', function(e){
-		    if(e.keyCode  == 68) {
-		        doSomething();
-		        // 返回false, 防止重复触发copy事件
-		        return false;
-		    }
-		})
+		// $(document).unbind('keydown').bind('keydown', function(e){
+		//     if(e.keyCode  == 68) {
+		//         doSomething();
+		//         // 返回false, 防止重复触发copy事件
+		//         return false;
+		//     }
+		// })
+
+        // 监听鼠标松开事件
+        $(document).mouseup(function(){
+            doSomething();
+        });
 
 		// 得到所有已经标注好的实体
 		var entity_name_label = document.getElementsByClassName("entity_name_label");

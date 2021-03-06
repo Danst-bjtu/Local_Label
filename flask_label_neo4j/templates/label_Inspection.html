@@ -81,64 +81,18 @@
 			</nav>
 		</div>
         <div class="col-md-3">
-<!--            <div class="panel panel-default panel-danger">-->
-<!--                <div class="panel-heading">实体信息</div>-->
-<!--                <div class="panel-body">-->
-<!--					<table id="addentityTable">-->
-<!--						<tbody id="entitytempleteTBody" style="display: none;">-->
-<!--							<tr style="line-height: 40px;">-->
-<!--								<td><button class="entity_name_label btn btn-primary" id="entity_name" name="entity" type="button" onclick="getSelectEntity(this)">-->
-<!--									实体名称与标签-->
-<!--								</button>-->
-<!--								</td>-->
-<!--								<td>-->
-<!--									&nbsp;-->
-<!--									<button type="button" class="btn btn-default" style="border: none" aria-label="Left Align" onclick="deleteentityRow(this)">-->
-<!--										<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>-->
-<!--									</button>-->
-<!--								</td>-->
-<!--							</tr>-->
-<!--						</tbody>-->
-<!--						<tbody id="entityfootTbody"></tbody>-->
-<!--					</table>-->
-
-<!--                </div>-->
-<!--            </div>-->
             <div class="panel panel-default panel-success">
-                <div class="panel-heading">三元组信息<button class="col-md-offset-6 btn btn-danger" onclick="submitSen()">不合格</button></div>
+                <div class="panel-heading">三元组信息<button class="col-md-offset-6 btn btn-danger" id="reset" onclick="resetSen()">不合格</button></div>
                 <div class="panel-body">
                     <table id="addrelationTable" border="1px solid #ccc" cellspacing="0" cellpadding="0">
-                        <tbody id="relationtempleteTBody" >
+                        <tbody id="relationtempleteTBody" style="display: none">
                             <tr>
-                                <td class="col-md-10" style="background-color: antiquewhite;">
+                                <td class="col-md-12" style="background-color: antiquewhite;">
                                     <span id="head_entity" class="label label-primary" name="head_entity">头实体</span><br>
-<!--									<input type="hidden" id="input_head_entity" name="head_entity" value="头实体" />-->
                                     <span id="relation_name" class="label label-default" name="relation_name">关系</span><br>
-<!--									<input type="hidden" id="input_relation_name" name="relation_name" value="关系" />-->
                                     <span id="tail_entity" class="label label-primary" name="tail_entity">尾实体</span><br>
-<!--									<input type="hidden" id="input_tail_entity" name="tail_entity" value="尾实体" />-->
                                 </td>
-                                <td class="col-md-2">
-                                    <button type="button" class="btn btn-default btn-lg" style="border: none" aria-label="Left Align" onclick="deleterelationRow(this)">
-										<span class="glyphicon glyphicon-remove"></span>
-									</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                        <tbody id="relationtempleteTBody" >
-                            <tr>
-                                <td class="col-md-10" style="background-color: antiquewhite;">
-                                    <span id="head_entity" class="label label-primary" name="head_entity">头实体</span><br>
-<!--									<input type="hidden" id="input_head_entity" name="head_entity" value="头实体" />-->
-                                    <span id="relation_name" class="label label-default" name="relation_name">关系</span><br>
-<!--									<input type="hidden" id="input_relation_name" name="relation_name" value="关系" />-->
-                                    <span id="tail_entity" class="label label-primary" name="tail_entity">尾实体</span><br>
-<!--									<input type="hidden" id="input_tail_entity" name="tail_entity" value="尾实体" />-->
-                                </td>
-                                <td class="col-md-2">
-                                    <button type="button" class="btn btn-default btn-lg" style="border: none" aria-label="Left Align" onclick="deleterelationRow(this)">
-										<span class="glyphicon glyphicon-remove"></span>
-									</button>
+                                <td>
                                 </td>
                             </tr>
                         </tbody>
@@ -148,73 +102,42 @@
             </div>
         </div>
     </div>
-<!--    添加标签弹窗-->
-    <div class="modal fade bs-example-modal-lg" id="entity_label_model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-		<div class="modal-dialog modal-lg" role="document">
-		  <div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title">请选择实体标签</h4>
-			  </div>
-			  <div class="modal-body">
-                  {% if entity_type %}
-                  {% for type in entity_type %}
-                    <button type="button" class="btn btn-success btn-lg" data-dismiss="modal" onclick="setentityValue(this)">{{type['m']['name']}}</button>
-                  {% endfor %}
-                  {% else %}
-                    <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal" disabled="disabled">请先添加实体标签</button>
-                  {% endif %}
-              </div>
-			  <div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-			</div>
-		  </div>
-		</div>
-	</div>
-    <div class="modal fade bs-example-modal-lg" id="relation_label_model" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-		<div class="modal-dialog modal-lg" role="document">
-		  <div class="modal-content">
-			  <div class="modal-header">
-			    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="relation_model">请选择关系标签与尾实体</h4>
-			  </div>
-			  <div class="modal-body">
-                    <!-- 得到所有的关系类别 -->
-                    {% if relation_type %}
-                    {% for type in relation_type %}
-                        <label class="radio-inline"><input type="radio" name="optradio" value="{{type['m']['name']}}">{{type['m']['name']}}</label>
-                    {% endfor %}
-                    {% else %}
-                        <label class="radio-inline"><input type="radio" name="optradio" value="请先添加关系标签" disabled>请先添加关系标签</label>
-                    {% endif %}
-                    <hr>
-                    <button type="button" id="tailEntity" style="display: none;margin: 10px;" class="btn btn-primary" data-dismiss="modal" onclick="setrelationValue(this)">上级</button>
-			  </div>
-			  <div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-			</div>
-		  </div>
-		</div>
-	</div>
 
     <script type="text/javascript">
         var skip = 0
-        var fenju={
-            'skip':skip,
-            'item_id':'{{item_id}}'
+        var islabel = parseInt(document.getElementById('islabel_count').getAttribute('d'));
+        if(islabel==0){
+            document.getElementById('reset').setAttribute("disabled","disabled")
         }
-        $.ajax({
-            type:'GET',
-            url:'{{url_for("just_label.next_fenju")}}',
-            data:fenju,
-            dataType:'json',//希望服务器返回json格式的数据
-            success:function(data){
-                var myJSON = JSON.stringify(data);
-                var mylist = JSON.parse(myJSON);
-                document.getElementById('current_sen').setAttribute('d',mylist[0]['ID(q)']);
-                document.getElementById('wenben').innerText=mylist[0]['q']['content'];
+        else{
+            var fenju={
+                'skip':skip,
+                'item_id':'{{item_id}}'
             }
-        });
+            $.ajax({
+                type:'GET',
+                url:'{{url_for("just_label.next_labelfenju")}}',
+                data:fenju,
+                dataType:'json',//希望服务器返回json格式的数据
+                success:function(data){
+                    var myJSON = JSON.stringify(data);
+                    var mylist = JSON.parse(myJSON);
+                    document.getElementById('current_sen').setAttribute('d',mylist[0]['ID(q)']);
+                    document.getElementById('wenben').innerText=mylist[0]['q']['content'];
+                    for(var i=1;i<mylist.length;i++){
+                        document.getElementById('head_entity').innerHTML=mylist[i]['m.name'];
+                        document.getElementById('relation_name').innerHTML=mylist[i]['type(rr)'];
+                        document.getElementById('tail_entity').innerHTML=mylist[i]['p.name'];
+                        var table = document.getElementById("addrelationTable");
+                        var tbody = document.getElementById("relationtempleteTBody");
+                        var newTBody = tbody.cloneNode(true);
+                        newTBody.style.display="";
+                        var footTBody = document.getElementById("relationfootTbody");
+                        table.insertBefore(newTBody,footTBody);
+                    }
+                }
+            });
+        }
 
         // 上一页
         function Previous(){
@@ -226,7 +149,7 @@
                 }
                 $.ajax({
                     type:'GET',
-                    url:'{{url_for("just_label.next_fenju")}}',
+                    url:'{{url_for("just_label.next_labelfenju")}}',
                     data:fenju,
                     dataType:'json',//希望服务器返回json格式的数据
                     success:function(data){
@@ -234,16 +157,28 @@
                         var mylist = JSON.parse(myJSON);
                         document.getElementById('current_sen').setAttribute('d',mylist[0]['ID(q)']);
                         document.getElementById('wenben').innerText=mylist[0]['q']['content'];
+                        document.getElementById('reset').removeAttribute("disabled")
+                        $("#entitytempleteTBody").nextAll().remove();
+                        $("#relationtempleteTBody").nextAll().remove();
+                        for(var i=1;i<mylist.length;i++){
+                            document.getElementById('head_entity').innerHTML=mylist[i]['m.name'];
+                            document.getElementById('relation_name').innerHTML=mylist[i]['type(rr)'];
+                            document.getElementById('tail_entity').innerHTML=mylist[i]['p.name'];
+                            var table = document.getElementById("addrelationTable");
+                            var tbody = document.getElementById("relationtempleteTBody");
+                            var newTBody = tbody.cloneNode(true);
+                            newTBody.style.display="";
+                            var footTBody = document.getElementById("relationfootTbody");
+                            table.insertBefore(newTBody,footTBody);
+                        }
                     }
                 });
-                $("#entitytempleteTBody").nextAll().remove();
-                $("#relationtempleteTBody").nextAll().remove();
             }
         }
 
         // 下一页
         function Next(){
-            var shengyu = document.getElementById('sen_count').getAttribute('d')-document.getElementById('islabel_count').getAttribute('d')-1;
+            var shengyu = document.getElementById('islabel_count').getAttribute('d')-1;
             if(skip<shengyu){
                 skip += 1;
                 var fenju={
@@ -252,7 +187,7 @@
                 }
                 $.ajax({
                     type:'GET',
-                    url:'{{url_for("just_label.next_fenju")}}',
+                    url:'{{url_for("just_label.next_labelfenju")}}',
                     data:fenju,
                     dataType:'json',//希望服务器返回json格式的数据
                     success:function(data){
@@ -260,81 +195,49 @@
                         var mylist = JSON.parse(myJSON);
                         document.getElementById('current_sen').setAttribute('d',mylist[0]['ID(q)']);
                         document.getElementById('wenben').innerText=mylist[0]['q']['content'];
+                        document.getElementById('reset').removeAttribute("disabled")
+                        $("#entitytempleteTBody").nextAll().remove();
+                        $("#relationtempleteTBody").nextAll().remove();
+                        for(var i=1;i<mylist.length;i++){
+                            document.getElementById('head_entity').innerHTML=mylist[i]['m.name'];
+                            document.getElementById('relation_name').innerHTML=mylist[i]['type(rr)'];
+                            document.getElementById('tail_entity').innerHTML=mylist[i]['p.name'];
+                            var table = document.getElementById("addrelationTable");
+                            var tbody = document.getElementById("relationtempleteTBody");
+                            var newTBody = tbody.cloneNode(true);
+                            newTBody.style.display="";
+                            var footTBody = document.getElementById("relationfootTbody");
+                            table.insertBefore(newTBody,footTBody);
+                        }
                     }
                 });
-                $("#entitytempleteTBody").nextAll().remove();
-                $("#relationtempleteTBody").nextAll().remove();
             }
         }
 
-        // 提交三元组
-        function submitSen(){
-            var submit = []
-            // var headlist = []
-            // var relationlist=[]
-            // var taillist=[]
+        // 不合格
+        function resetSen(){
             var sen_id = document.getElementById('current_sen').getAttribute('d')
-            var head_entity = document.getElementsByName('head_entity')
-            var relation_name = document.getElementsByName('relation_name')
-            var tail_entity = document.getElementsByName('tail_entity')
-            for(var i=1;i<head_entity.length;i++){
-                submit.push({'head_entity':head_entity[i].innerText,
-                    'relation_name':relation_name[i].innerText,'tail_entity':tail_entity[i].innerText})
-                // headlist.push(head_entity[i].innerText)
-                // relationlist.push(relation_name[i].innerText)
-                // taillist.push(tail_entity[i].innerText)
-            }
-            // submit = {'head_entity':headlist,'relation_name':relationlist,'tail_entity':taillist}
-            submit = {'submit':submit}
-            console.log(sen_id)
             var fenju={
                 'sen_id':sen_id,
-                'submit':JSON.stringify(submit)
             }
             $.ajax({
                 type:'POST',
-                url:'{{url_for("just_label.submit_fenju")}}',
+                url:'{{url_for("just_label.reset_fenju")}}',
                 data:fenju,
                 dataType:'json',//希望服务器返回json格式的数据
                 success:function(data){
-                    // console.log(JSON.stringify(data))
                     skip=-1;
                     alert(JSON.stringify(data).replaceAll('"',''));
-                    var islabel = parseInt(document.getElementById('islabel_count').getAttribute('d'))+1;
+                    var islabel = parseInt(document.getElementById('islabel_count').getAttribute('d'))-1;
+                    document.getElementById('reset').setAttribute("disabled","disabled")
                     document.getElementById('islabel_count').setAttribute('d',islabel);
                     var sen_count = document.getElementById('sen_count').getAttribute('d');
                     var zhanbi = islabel*100/sen_count;
                     document.getElementById('progress').style.width=zhanbi+'%';
                     document.getElementById('progress_content').innerHTML = islabel+"/"+sen_count+" Complete";
-
-                    // var myJSON = JSON.stringify(data);
-                    // var mylist = JSON.parse(myJSON);
-                    // document.getElementById('current_sen').setAttribute('d',mylist[0]['ID(q)']);
-                    // document.getElementById('wenben').innerText=mylist[0]['q']['content'];
                 }
             });
         }
-
-		//  监听 D事件
-		$(document).unbind('keydown').bind('keydown', function(e){
-		    if(e.keyCode  == 68) {
-		        doSomething();
-		        // 返回false, 防止重复触发copy事件
-		        return false;
-		    }
-		})
-
-		// 得到所有已经标注好的实体
-		var entity_name_label = document.getElementsByClassName("entity_name_label");
-		// 得到点击的头实体
-		var selectHeadEntity;
-
-
-		function doSomething(){
-			if(window.getSelection(0).toString()!=''){
-				$(entity_label_model).modal();
-			}
-		}
 
         /*
         *增加实体模板行
@@ -367,14 +270,7 @@
 			}
             $(relation_label_model).modal();
         }
-        /*
-        *删除实体模板行
-        */
-        function deleteentityRow(obj) {
-            var tbody = obj.parentNode.parentNode.parentNode;
-            var table = document.getElementById("addentityTable");
-            table.removeChild(tbody);
-        }
+
         /**
         *向实体模板中填充值
         */

@@ -44,9 +44,7 @@ def label_inspection(item_id):
     sen_count = graph.run("match(n:label_items)-[r:`文件路径`]->(m),(m)-[s:分句]->(q) where ID(n)="+item_id+" return count(q)").data()
     islabel_count = graph.run("match(n:label_items)-[r:`文件路径`]->(m),(m)-[s:分句]->(q) where ID(n)="+item_id+" and q.islabel='yes' return count(q)").data()
     zhanbi = round(int(islabel_count[0]['count(q)'])*100/int(sen_count[0]['count(q)']), 2)
-    entity_type = graph.run("MATCH (n:label_items)-[r:`包含`]-(m:`实体类别`) where ID(n)=" + item_id + " return m").data()
-    relation_type = graph.run("MATCH (n:label_items)-[r:`包含`]-(m:`关系类别`) where ID(n)=" + item_id + " return m").data()
-    return render_template('label_inspection.html', item_id=item_id, sen_count=sen_count, islabel_count=islabel_count, zhanbi=zhanbi,entity_type = entity_type, relation_type = relation_type)
+    return render_template('label_inspection.html', item_id=item_id, sen_count=sen_count, islabel_count=islabel_count, zhanbi=zhanbi)
 
 
 if __name__ == '__main__':
