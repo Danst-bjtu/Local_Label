@@ -52,7 +52,7 @@ def next_fenju():
     content = graph.run("match(n:label_items)-[r:`文件路径`]->(m),(m)-[s:分句]->(q) where ID(n)="+item_id+" and q.islabel='no' return ID(q),q order by ID(q) SKIP "+skip+" LIMIT 1").data()
     return jsonify(content)
 
-# 已标注的单句
+# 已标注单句
 @just_label.route('/next_labelfenju', methods=['POST','GET'])
 def next_labelfenju():
     skip = request.args.get('skip')
