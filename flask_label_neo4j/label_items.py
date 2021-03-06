@@ -47,7 +47,7 @@ def add_item():
         'username'] + "'})-[r: 创建项目]->(n:label_items) return ID(n),n").data()
     return render_template('index.html', label_items=label_items, error="添加成功!")
 
-
+# 不合格
 @label_items.route("/reset_date/<item_id>")
 def reset_date(item_id):
     graph.run("match (n:label_items)-[r:`文件路径`]->(m),(m)-[rr:`分句`]->(p),(p)-[s:`三元组`]->(q),(q)-[ss]->(k) where ID(n)="+item_id+" set p.islabel='no' detach delete q,k")

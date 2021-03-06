@@ -38,7 +38,7 @@ def just_label(item_id):
     relation_type = graph.run("MATCH (n:label_items)-[r:`包含`]-(m:`关系类别`) where ID(n)=" + item_id + " return m").data()
     return render_template('just_label.html', item_id=item_id, sen_count=sen_count, islabel_count=islabel_count, zhanbi=zhanbi,entity_type = entity_type, relation_type = relation_type)
 
-
+# 质检结果
 @app.route('/label_inspection/<item_id>')
 def label_inspection(item_id):
     sen_count = graph.run("match(n:label_items)-[r:`文件路径`]->(m),(m)-[s:分句]->(q) where ID(n)="+item_id+" return count(q)").data()
