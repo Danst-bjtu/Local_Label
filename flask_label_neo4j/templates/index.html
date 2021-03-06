@@ -63,8 +63,8 @@
                                 <a href="/just_label/{{item['ID(n)']}}"><input type="button" value='标注' class="btn btn-danger"></a>&nbsp
                                 <a href="/label_inspection/{{item['ID(n)']}}"><input type="button" value='质检' class="btn btn-danger"></a>&nbsp
                                 <a href="/update_label/{{item['ID(n)']}}"><input type="button" value='标签' class="btn btn-info"></a>&nbsp
-                                <a href="/del_label_item/{{item['ID(n)']}}"><input type="button" value='删除' class="btn btn-primary"></a>&nbsp
-                                <a href="/reset_date/{{item['ID(n)']}}"><input type="button" value='清空' class="btn btn-warning"></a>
+                                <input id="del" type="button" value='删除' class="btn btn-primary" d="{{item['ID(n)']}}" onclick="del(this)">&nbsp
+                                <input id="reset" type="button" value='清空' class="btn btn-warning" d="{{item['ID(n)']}}" onclick="reset(this)">
                             </td>
                         </tr>
                     {% endfor %}
@@ -117,6 +117,22 @@
         $('#additem').click(function(){
             $('#additems').modal();
         });
+
+        function del(obj){
+            var item_id = obj.getAttribute('d');
+            if(confirm("确定删除该项目？")){
+                window.location.href="/del_label_item/"+item_id;
+                alert("删除成功！")
+            }
+        }
+
+        function reset(obj){
+            var item_id = obj.getAttribute('d');
+            if(confirm("确定清空该项目所有已标注信息？")){
+                window.location.href="/reset_date/"+item_id;
+                alert("清空成功！")
+            }
+        }
     </script>
 </body>
 </html>
